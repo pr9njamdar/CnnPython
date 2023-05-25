@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+
+    <body>
+        <h1>Images</h1>
+
+  <h2>Upload an Image</h2>
+  <!-- Image Upload Form -->
+  <input type="file" accept="image/jpg" id="imageInput">
+  <button onclick="createImage(event)">Submit</button>
+
+  
+
+  <script>
+    const imageEndpoint = '/check/'
+    
+
+    const imageInput = document.querySelector('#imageInput')
+
+
+    const createImage = async (event) => {
+      let img=''
+      event.preventDefault()
+      let image = imageInput.files[0]
+      const reader=new FileReader();
+    await  reader.addEventListener('load',async()=>{
+       
+       await fetch(imageEndpoint, {
+         method: 'POST',
+         body:JSON.stringify({image:reader.result})
+     }).then((res)=>{
+        console.log(JSON.stringify(res))
+     })
+      })
+      reader.readAsDataURL(image);
+
+      
+
+     
+    }
+        </script>
+    </body>
+</html>
