@@ -1,46 +1,93 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        
-    </head>
-
-    <body>
-        <h1>Images</h1>
-
-  <h2>Upload an Image</h2>
-  <!-- Image Upload Form -->
-  <input type="file" accept="image/jpg" id="imageInput">
-  <button onclick="createImage(event)">Submit</button>
-
-  
-
-  <script>
-    const imageEndpoint = '/check/'
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Project Website</title>
+   
+    <style>
+body{
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
+}
+.container{
+  height: 600px;
+ width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: aliceblue;
+  border-radius: 20px;
+  -webkit-box-shadow: 10px 10px 16px 0px rgba(0, 0, 0, 0.637);
+-moz-box-shadow: 10px 10px 16px 0px rgba(0, 0, 0, 0.63);
+box-shadow: 10px 10px 16px 0px rgba(0, 0, 0, 0.61);
 
-    const imageInput = document.querySelector('#imageInput')
+color: #5d5dff;
+}
+
+button{
+  height: 30px;
+  border-radius: 20px;
+  border: none;
+  background-color: #5d5dff;
+  color: aliceblue;
+}
 
 
-    const createImage = async (event) => {
-      let img=''
-      event.preventDefault()
-      let image = imageInput.files[0]
-      const reader=new FileReader();
-    await  reader.addEventListener('load',async()=>{
-       
-       await fetch(imageEndpoint, {
-         method: 'POST',
-         body:JSON.stringify({image:reader.result})
-     }).then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
-      })
-      reader.readAsDataURL(image);
 
-      
+    </style>
 
-     
-    }
-        </script>
-    </body>
+
+  </head>
+
+  <body>
+    <div class="container">
+      <div >
+        <h1>Website for Cancer Checkup</h1>
+      </div>
+      <h2>Upload an Image</h2>
+      <!-- Image Upload Form -->
+      <input type="file" accept="image/jpg" id="imageInput" />
+      <h4 id="result"></h4>
+      <button onclick="createImage(event)">Submit</button>
+    </div>
+    <script>
+      const imageEndpoint = "/check/";
+    
+      const imageInput = document.getElementById("imageInput");
+    
+      const createImage = async (event) => {
+        let img = "";
+        event.preventDefault();
+        let image = imageInput.files[0];
+        const reader = new FileReader();
+        await reader.addEventListener("load", async () => {
+          await fetch(imageEndpoint, {
+            method: "POST",
+            body: JSON.stringify({ image: reader.result }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("result").innerText=`${data.message} cancer`
+                 
+              
+              
+              console.log(data)
+            })
+            .catch((error) => console.log(error));
+        });
+        reader.readAsDataURL(image);
+      };
+    </script>
+
+   
+  </body>
 </html>
