@@ -9,7 +9,8 @@ import base64
 from PIL import Image
 from io import BytesIO
 import torch
-
+import json
+from django.http import HttpResponse
   
 
 
@@ -36,10 +37,11 @@ def check(request):
         image=torch.tensor(np.asarray(image.resize((64,64))))
         image=image/255
         print(image,image.shape)
-        # ypreds=model0(image.unsqueeze(dim=0).permute(0,3,1,2))
-        # print(classes[torch.argmax(ypreds)])
-        
-        return JsonResponse({'result':'classes[torch.argmax(ypreds)]'})
+        ypreds=model0(image.unsqueeze(dim=0).permute(0,3,1,2))
+        print(classes[torch.argmax(ypreds)])
+        data = {'message': classes[torch.argmax(ypreds)]}
+        json_data = json.dumps(data)
+        return HttpResponse(json_data, content_type='application/json')
        
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=405)
